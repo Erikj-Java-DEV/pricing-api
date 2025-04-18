@@ -28,6 +28,6 @@ public class PriceServiceImpl implements PriceService {
     @Override
     public Price getApplicablePrice(Long productId, Long brandId, LocalDateTime date) {
         return priceRepository.findApplicablePrice(productId, brandId, date)
-                .orElseThrow(() -> new PriceNotFoundException(productId, brandId, date.toString()));
+                .orElseThrow(() -> new PriceNotFoundException(productId, brandId, date));
     }
 }
