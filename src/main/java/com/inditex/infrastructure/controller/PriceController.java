@@ -2,6 +2,7 @@ package com.inditex.infrastructure.controller;
 
 import com.inditex.application.usecase.GetApplicablePriceUseCase;
 import com.inditex.domain.model.Price;
+import com.inditex.infrastructure.controller.dto.PriceResponseDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +20,24 @@ public class PriceController {
     }
 
     @GetMapping
-    public ResponseEntity<Price> getPrice(
+    public ResponseEntity<PriceResponseDto> getPrice(
             @RequestParam("date")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-            LocalDateTime date,
-
-            @RequestParam("productId")
-            Long productId,
-
-            @RequestParam("brandId")
-            Long brandId
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
+            @RequestParam("productId") Long productId,
+            @RequestParam("brandId") Long brandId
     ) {
         Price price = useCase.execute(productId, brandId, date);
-        return ResponseEntity.ok(price);
+
+        PriceResponseDto response = new PriceResponseDto(
+                price.getProductId(),
+                price.getBrandId(),
+                price.getPriceList(),
+                price.getStartDate(),
+                price.getEndDate(),
+                price.getPrice(),
+                price.getCurr()
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
