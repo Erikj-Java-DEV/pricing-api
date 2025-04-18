@@ -19,6 +19,17 @@ public class PriceController {
         this.useCase = useCase;
     }
 
+    /**
+     * Controlador REST para consultar el precio aplicable a un producto en un momento dado.
+     *
+     * Endpoint: GET /api/prices
+     * Parámetros:
+     *  - date: fecha y hora de aplicación del precio (ISO-8601)
+     *  - productId: identificador del producto
+     *  - brandId: identificador de la cadena/marca
+     *
+     * Devuelve el precio que aplica basado en prioridad, fecha y coincidencia de producto/marca.
+     */
     @GetMapping
     public ResponseEntity<PriceResponseDto> getPrice(
             @RequestParam("date")

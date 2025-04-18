@@ -15,6 +15,12 @@ public class GetApplicablePriceUseCase {
         this.priceService = priceService;
     }
 
+    /**
+     * Caso de uso para obtener el precio aplicable según la fecha de aplicación,
+     * el identificador del producto y el identificador de la marca.
+     *
+     * Aplica la lógica de negocio correspondiente para seleccionar el precio correcto.
+     */
     public Price execute(Long productId, Long brandId, LocalDateTime date) {
         return priceService.getApplicablePrice(productId, brandId, date);
     }
