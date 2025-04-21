@@ -4,6 +4,7 @@ import com.inditex.domain.exception.PriceNotFoundException;
 import com.inditex.domain.model.Price;
 import com.inditex.domain.repository.PriceRepository;
 import com.inditex.domain.service.PriceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  *  - Mayor prioridad si hay más de uno
  */
 @Service
+@Slf4j
 public class PriceServiceImpl implements PriceService {
 
     private final PriceRepository priceRepository;
@@ -27,7 +29,11 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public Price getApplicablePrice(Long productId, Long brandId, LocalDateTime date) {
+        log.info("🔍 Buscando precio para producto={}, marca={}, fecha={}", productId, brandId, date);
+
         return priceRepository.findApplicablePrice(productId, brandId, date)
-                .orElseThrow(() -> new PriceNotFoundException(productId, brandId, date));
-    }
+                .orElseThrow(() -> {
+                    log.warn("⚠️ No se encontró precio para producto={}, marca={}, fecha={}", productId, brandId, date);
+                    return new PriceNotFoundException(productId, brandId, date);
+                });
 }
