@@ -36,4 +36,5 @@ public class PriceServiceImpl implements PriceService {
                     log.warn("⚠️ No se encontró precio para producto={}, marca={}, fecha={}", productId, brandId, date);
                     return new PriceNotFoundException(productId, brandId, date);
                 });
+    }
 }

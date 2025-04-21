@@ -1,0 +1,43 @@
+# --------------------------------------------
+# ✅ Descripción del workflow de CI/CD
+#
+# Paso              | Descripción
+# ------------------|----------------------------------------------
+# push/pull_request | Ejecuta en cada push o PR a DEV o main
+# checkout          | Baja el código
+# setup-java        | Instala Java 17 (Temurin)
+# mvn clean verify  | Compila, corre los tests y genera el informe Jacoco
+# upload-artifact   | Guarda el informe de cobertura como artefacto en GitHub Actions
+# --------------------------------------------
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "DEV", "main" ]
+  pull_request:
+    branches: [ "DEV", "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout código
+        uses: actions/checkout@v3
+
+      - name: ☕️ Instalar Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🛠️ Build con Maven + Test + Jacoco
+        run: mvn clean verify
+
+      - name: 📊 Subir reporte Jacoco
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
