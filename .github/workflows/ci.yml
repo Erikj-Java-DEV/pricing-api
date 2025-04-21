@@ -37,7 +37,7 @@ jobs:
 
       - name: 📊 Subir reporte Jacoco
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
           path: target/site/jacoco
